@@ -1,0 +1,88 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\guait\\Desktop\\TiendaKeytlin\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3C486012-31BD-4F23-A1A9-2C3219A04040}|TiendaKeytlin.Server\\TiendaKeytlin.Server.csproj|c:\\users\\guait\\desktop\\tiendakeytlin\\tiendakeytlin.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C486012-31BD-4F23-A1A9-2C3219A04040}|TiendaKeytlin.Server\\TiendaKeytlin.Server.csproj|solutionrelative:tiendakeytlin.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C486012-31BD-4F23-A1A9-2C3219A04040}|TiendaKeytlin.Server\\TiendaKeytlin.Server.csproj|c:\\users\\guait\\desktop\\tiendakeytlin\\tiendakeytlin.server\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C486012-31BD-4F23-A1A9-2C3219A04040}|TiendaKeytlin.Server\\TiendaKeytlin.Server.csproj|solutionrelative:tiendakeytlin.server\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C486012-31BD-4F23-A1A9-2C3219A04040}|TiendaKeytlin.Server\\TiendaKeytlin.Server.csproj|c:\\users\\guait\\desktop\\tiendakeytlin\\tiendakeytlin.server\\tiendakeytlin.server.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{3C486012-31BD-4F23-A1A9-2C3219A04040}|TiendaKeytlin.Server\\TiendaKeytlin.Server.csproj|solutionrelative:tiendakeytlin.server\\tiendakeytlin.server.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C486012-31BD-4F23-A1A9-2C3219A04040}|TiendaKeytlin.Server\\TiendaKeytlin.Server.csproj|c:\\users\\guait\\desktop\\tiendakeytlin\\tiendakeytlin.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{3C486012-31BD-4F23-A1A9-2C3219A04040}|TiendaKeytlin.Server\\TiendaKeytlin.Server.csproj|solutionrelative:tiendakeytlin.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\guait\\Desktop\\TiendaKeytlin\\TiendaKeytlin.Server\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "TiendaKeytlin.Server\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\guait\\Desktop\\TiendaKeytlin\\TiendaKeytlin.Server\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "TiendaKeytlin.Server\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-14T09:41:29.285Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TiendaKeytlin.Server",
+              "DocumentMoniker": "C:\\Users\\guait\\Desktop\\TiendaKeytlin\\TiendaKeytlin.Server\\TiendaKeytlin.Server.csproj",
+              "RelativeDocumentMoniker": "TiendaKeytlin.Server\\TiendaKeytlin.Server.csproj",
+              "ToolTip": "C:\\Users\\guait\\Desktop\\TiendaKeytlin\\TiendaKeytlin.Server\\TiendaKeytlin.Server.csproj",
+              "RelativeToolTip": "TiendaKeytlin.Server\\TiendaKeytlin.Server.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-03-14T09:19:39.608Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\guait\\Desktop\\TiendaKeytlin\\TiendaKeytlin.Server\\Program.cs",
+              "RelativeDocumentMoniker": "TiendaKeytlin.Server\\Program.cs",
+              "ToolTip": "C:\\Users\\guait\\Desktop\\TiendaKeytlin\\TiendaKeytlin.Server\\Program.cs",
+              "RelativeToolTip": "TiendaKeytlin.Server\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-14T09:18:09.306Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\guait\\Desktop\\TiendaKeytlin\\TiendaKeytlin.Server\\appsettings.json",
+              "RelativeDocumentMoniker": "TiendaKeytlin.Server\\appsettings.json",
+              "ToolTip": "C:\\Users\\guait\\Desktop\\TiendaKeytlin\\TiendaKeytlin.Server\\appsettings.json",
+              "RelativeToolTip": "TiendaKeytlin.Server\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-03-14T08:56:47.908Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
