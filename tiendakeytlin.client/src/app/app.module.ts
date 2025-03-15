@@ -1,26 +1,110 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
-import { routes } from './app-routing.module';
+import { RouterModule, Routes } from '@angular/router';
+
 import { AppComponent } from './app.component';
-import { authInterceptor } from './interceptors/auth.interceptors';  // Ajusta la ruta si es necesario
+import { LoginComponent } from './components/login/login.component'; // Asegúrate de que LoginComponent esté importado
+
+import { AuthService } from './services/auth.service';
+
+// Interceptor para añadir el token en las solicitudes
+import { Injectable } from '@angular/core';
+import {
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor,
+  HttpErrorResponse
+} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+
+  constructor(private authService: AuthService, private router: Router) { }
+
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
+
+    return next.handle(request).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('tokenExpiration');
+          localStorage.removeItem('currentUser');
+          this.router.navigate(['/login']);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+}
+
+// Guardia de autenticación
+import { Injectable as GuardInjectable } from '@angular/core';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+
+@GuardInjectable()
+export class AuthGuard implements CanActivate {
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) { }
+
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): boolean {
+
+    const token = localStorage.getItem('token');
+    const expiration = localStorage.getItem('tokenExpiration');
+
+    if (token && expiration && new Date(expiration) > new Date()) {
+      return true;
+    }
+
+    this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+    return false;
+  }
+}
+
+// Definir rutas
+const routes: Routes = [
+  { path: 'login', component: LoginComponent },
+  // Ejemplo de una ruta protegida
+  // { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '**', redirectTo: '/login' }
+];
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
   imports: [
     BrowserModule,
-    HttpClientModule, // Habilita el soporte HTTP en tu aplicación
-    RouterModule.forRoot(routes) // Configura las rutas
+    FormsModule,
+    HttpClientModule,
+    RouterModule.forRoot(routes),
+    LoginComponent // Importa el componente standalone aquí
+  ],
+  declarations: [
+    AppComponent,
+    // No es necesario declarar LoginComponent aquí
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useFactory: authInterceptor, // Usa la función directamente
-      multi: true // Permite añadir más de un interceptor si es necesario
-    }
+    AuthService,
+    AuthGuard,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

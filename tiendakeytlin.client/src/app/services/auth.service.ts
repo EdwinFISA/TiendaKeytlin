@@ -1,58 +1,133 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+
+// Definir interfaces directamente en el servicio
+export interface LoginModel {
+  username: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  token: string;
+  expiration: Date;
+  name: string;
+  userId: number;
+}
+
+export interface User {
+  id: number;
+  username: string;
+  name: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api/auth';  // Cambia esta URL a tu API de autenticación
+  private apiUrl = `${environment.apiUrl}/api/auth`;
+  private currentUserSubject: BehaviorSubject<User | null>;
+  public currentUser: Observable<User | null>;
+  private tokenExpirationTimer: any;
 
-  constructor(private http: HttpClient, private router: Router) { }
-
-  // Método de login para obtener el JWT
-  login(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { email, password });
+  constructor(private http: HttpClient) {
+    this.currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromLocalStorage());
+    this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  // Almacenar el token JWT en el almacenamiento local
-  saveToken(token: string): void {
-    localStorage.setItem('authToken', token);
+  public get currentUserValue(): User | null {
+    return this.currentUserSubject.value;
   }
 
-  // Obtener el token del almacenamiento local
-  getToken(): string | null {
-    return localStorage.getItem('authToken');
+  // Login service
+  login(loginData: LoginModel): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, loginData)
+      .pipe(
+        tap(response => {
+          // Guardar token y datos de usuario en localStorage
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('tokenExpiration', response.expiration.toString());
+
+          const user: User = {
+            id: response.userId,
+            username: loginData.username,
+            name: response.name
+          };
+
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          this.currentUserSubject.next(user);
+
+          // Configurar temporizador para cerrar sesión cuando expire el token
+          this.autoLogout(new Date(response.expiration).getTime() - new Date().getTime());
+        }),
+        catchError(error => {
+          console.error('Error en login:', error);
+          return throwError(() => new Error(error.error || 'Error al iniciar sesión'));
+        })
+      );
   }
 
-  // Verificar si el usuario está autenticado
+  // Logout service
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('tokenExpiration');
+    localStorage.removeItem('currentUser');
+    this.currentUserSubject.next(null);
+
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+      this.tokenExpirationTimer = null;
+    }
+  }
+
+  // Verifica si el usuario está autenticado
   isAuthenticated(): boolean {
-    const token = this.getToken();
-    // Si no hay token o el token ha expirado
-    if (!token) {
+    const token = localStorage.getItem('token');
+    const expirationDate = localStorage.getItem('tokenExpiration');
+
+    if (!token || !expirationDate) {
       return false;
     }
-    // Puedes agregar lógica aquí para verificar si el token sigue siendo válido
-    return true;
+
+    return new Date(expirationDate) > new Date();
   }
 
-  // Método de logout para eliminar el token
-  logout(): void {
-    localStorage.removeItem('authToken');
-    this.router.navigate(['/login']);
+  // Obtener token
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 
-  // Método para agregar el token a las solicitudes HTTP
-  getHeaders(): HttpHeaders {
-    const token = this.getToken();
-    return new HttpHeaders({
-      'Authorization': token ? `Bearer ${token}` : ''
-    });
+  // Obtener perfil del usuario
+  getUserProfile(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/profile`)
+      .pipe(
+        catchError(error => {
+          console.error('Error obteniendo perfil:', error);
+          return throwError(() => new Error('Error al obtener perfil de usuario'));
+        })
+      );
   }
 
-  // Método para obtener la información del usuario
-  getUserInfo(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/user`, { headers: this.getHeaders() });
+  // Obtener usuario desde localStorage
+  private getUserFromLocalStorage(): User | null {
+    const userData = localStorage.getItem('currentUser');
+    if (userData) {
+      try {
+        return JSON.parse(userData);
+      } catch (e) {
+        console.error('Error al parsear datos de usuario:', e);
+        return null;
+      }
+    }
+    return null;
+  }
+
+  // Establecer auto-logout al expirarse el token
+  private autoLogout(expirationDuration: number): void {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration);
   }
 }
